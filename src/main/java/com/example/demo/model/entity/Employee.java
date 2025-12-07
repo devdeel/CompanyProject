@@ -2,10 +2,7 @@ package com.example.demo.model.entity;
 
 import com.example.demo.model.entity.DTO.EmployeeDTO;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 // ORM = OBJECT RELATIONAL MAPPING:
 // from java class to a database table!
@@ -21,7 +18,6 @@ public class Employee { // 1 2 3 4 id auto inc
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-
     private String fullName;
     private Double salary;
     private String role;
@@ -33,6 +29,16 @@ public class Employee { // 1 2 3 4 id auto inc
                 .role(dto.getRole())
                 .build();
     }
+
+    @OneToOne
+    @JoinColumn(name = "address_id")
+    private Address address;
+
+
+    @ManyToOne
+    @JoinColumn(name ="department_id")
+    private Department department;
+
 
 
 }
