@@ -1,4 +1,4 @@
-package com.example.demo.model.entity.DTO;
+package com.example.demo.service.DTO;
 
 import com.example.demo.model.entity.Employee;
 import lombok.AllArgsConstructor;
