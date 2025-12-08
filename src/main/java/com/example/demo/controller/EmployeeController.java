@@ -1,9 +1,8 @@
 package com.example.demo.controller;
 
-import com.example.demo.model.entity.DTO.EmployeeDTO;
-import com.example.demo.model.entity.Employee;
+import com.example.demo.service.DTO.EmployeeDTO;
 import com.example.demo.service.EmployeeService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -11,37 +10,35 @@ import java.util.List;
 @RestController
 @RequestMapping("/employees")
 @CrossOrigin("*")
+@RequiredArgsConstructor
 
 public class EmployeeController {
 
-    @Autowired
-    private EmployeeService employeeService;
+    private final EmployeeService employeeService;
 
-
-    @GetMapping("/allEmployees")
-    public List<Employee> getEmployees() {
+    @GetMapping("/all")
+    public List<EmployeeDTO> getEmployees() {
         return employeeService.getEmployees();
     }
 
-    @GetMapping("/getEmployee")
-    public EmployeeDTO getEmployee(@RequestParam Integer id) {
+    @GetMapping("/{id}")
+    public EmployeeDTO getEmployee(@PathVariable Integer id) {
         return employeeService.getEmployee(id);
     }
 
-    @PostMapping("/saveEmployee")
-    public EmployeeDTO save(@RequestBody EmployeeDTO employee) {
+    @PostMapping("/create")
+    public EmployeeDTO create(@RequestBody EmployeeDTO employee) {
         return employeeService.saveEmployee(employee);
     }
 
-    @PutMapping("/updateEmployee")
-    public EmployeeDTO updateEmployee(@RequestBody EmployeeDTO employee) {
+    @PutMapping("/update/{id}")
+    public EmployeeDTO updateEmployee(@PathVariable Integer id, @RequestBody EmployeeDTO employee) {
+        employee.setId(id);
         return employeeService.updateEmployee(employee);
     }
 
-    @DeleteMapping("/deleteEmployee")
-    public void deleteEmployee(@RequestParam Integer id) {
+    @DeleteMapping("/delete/{id}")
+    public void deleteEmployee(@PathVariable Integer id) {
         employeeService.deleteEmployee(id);
-
     }
-
 }

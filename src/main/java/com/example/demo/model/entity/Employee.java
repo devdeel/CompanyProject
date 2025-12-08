@@ -1,11 +1,10 @@
 package com.example.demo.model.entity;
 
-import com.example.demo.model.entity.DTO.EmployeeDTO;
+import com.example.demo.service.DTO.EmployeeDTO;
 import jakarta.persistence.*;
 import lombok.*;
 
-// ORM = OBJECT RELATIONAL MAPPING:
-// from java class to a database table!
+
 @Table(name = "employee")
 @Entity
 @Data
@@ -13,32 +12,35 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 
-public class Employee { // 1 2 3 4 id auto inc
+public class Employee {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+
     private String fullName;
     private Double salary;
     private String role;
 
-    public static Employee toEntity(EmployeeDTO dto) {
-        return Employee.builder()
-                .id(dto.getId())
-                .fullName(dto.getFullName())
-                .role(dto.getRole())
-                .build();
-    }
+    @ManyToOne
+    @JoinColumn(name = "department_id")
+    private Department department;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "address_id")
     private Address address;
 
+    public static Employee toEntity(EmployeeDTO dto) {
+        if (dto == null) return null;
 
-    @ManyToOne
-    @JoinColumn(name ="department_id")
-    private Department department;
+        Employee employee = new Employee();
+        employee.setId(dto.getId());
+        employee.setFullName(dto.getFullName());
+        employee.setSalary(dto.getSalary());
+        employee.setRole(dto.getRole());
+        employee.setAddress(Address.toEntity(dto.getAddress()));
+        employee.setDepartment(Department.toEntity(dto.getDepartment()));
 
-
-
+        return employee;
+    }
 }
